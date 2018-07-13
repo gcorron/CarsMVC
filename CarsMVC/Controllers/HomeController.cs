@@ -26,5 +26,10 @@ namespace CarsMVC.Controllers
 
             return View();
         }
+
+        public ActionResult Cars()
+        {
+            return View();
+        }
     }
 }
