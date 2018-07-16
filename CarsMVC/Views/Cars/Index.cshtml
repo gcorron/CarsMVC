@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Corron.CarService.CarModel>
+﻿@model IEnumerable<CarsMVC.Models.CarModel>
 
 @{
-    ViewBag.Title = "Default Cars View";
+    ViewBag.Title = "Index";
 }
 
-<h2>CarsView</h2>
+<h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,13 +12,13 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.Year)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Make)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Model)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Year)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Owner)
@@ -29,20 +29,21 @@
 @foreach (var item in Model) {
     <tr>
         <td>
+            @Html.DisplayFor(modelItem => item.Year)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Make)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Model)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Year)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Owner)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CarID  }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.CarID })
+            @Html.ActionLink("Edit", "Edit", new { id=item.CarID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.CarID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CarID })
         </td>
     </tr>
 }
