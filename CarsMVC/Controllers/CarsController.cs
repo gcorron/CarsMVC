@@ -1,46 +1,38 @@
-﻿using CarsMVC.Models;
-using Corron.MVC.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core;
-using System.Data.Entity.Core.Objects;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity;
+using CarsMVC.ViewModels;
 
 namespace CarsMVC.Controllers
 {
     public class CarsController : Controller
     {
 
-        CarServiceContext JoesDB = new CarServiceContext();
 
         // GET: Car
         public ActionResult Index()
         {
-            var cars = from car in JoesDB.Cars
-                       orderby car.Year, car.Make, car.Model
-                       select car;
-
-            return View(cars.ToList());
+            var cars = CarViewModel.GetCars();
+            return View(cars);
         }
 
         public ActionResult Create()
         {
-            CarModel car = new CarModel();
+            CarViewModel car = new CarViewModel();
             return View("Edit", car);
 
         }
 
         [HttpPost]
-        public ActionResult Create(CarModel car)
+        public ActionResult Create(CarViewModel car)
         {
             if (ModelState.IsValid)
             {
-                //if (SQLData.UpdateCar(car))
-                    return RedirectToAction("Index");
+                car.Update();
+                return RedirectToAction("Index");
             }
 
             return View(car);
@@ -49,25 +41,25 @@ namespace CarsMVC.Controllers
 
         public ActionResult Edit(int id)
         {
-            CarModel car = JoesDB.Cars.Where<CarModel>(c => c.CarID==id).Single<CarModel>();
-
+            var car = CarViewModel.GetCar(id);
             return View(car);
         }
 
         [HttpPost]
-        public ActionResult Edit(CarModel car)
+        public ActionResult Edit(CarViewModel car)
         {
             if (ModelState.IsValid)
             {
-                JoesDB.Entry(car).State = EntityState.Modified;
-                JoesDB.SaveChanges();
+                car.Update();
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return View(car);
         }
 
         public ActionResult Delete(int id)
         {
-            //SQLData.DeleteCar(id);
+
+            CarViewModel.DeleteCar(id);
             return RedirectToAction("Index");
         }
 

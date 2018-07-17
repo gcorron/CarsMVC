@@ -1,4 +1,10 @@
-﻿@model IEnumerable<CarsMVC.Models.CarModel>
+﻿@model IEnumerable<CarsMVC.ViewModels.CarViewModel>
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/confirm-Bootstrap.js")"></script>
+    <script>$('a.confirm').confirmModal()</script>
+}
+
 
 @{
     ViewBag.Title = "Index";
@@ -26,26 +32,28 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Year)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Make)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Model)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Owner)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CarID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CarID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CarID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        var myModal = "myModal" + item.CarID;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Make)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CarID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CarID }, new { @class = "confirm" })
+
+            </td>
+        </tr>
+    }
 
 </table>

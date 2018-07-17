@@ -1,4 +1,4 @@
-﻿@model CarsMVC.Models.CarModel
+﻿@model CarsMVC.ViewModels.CarViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -11,9 +11,14 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>CarModel</h4>
+        <h4>Car ViewModel</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+        <div class="form-group">
+            @Html.HiddenFor(model => model.CarID)
+        </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.Year, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
