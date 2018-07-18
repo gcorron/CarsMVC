@@ -14,6 +14,10 @@ namespace CarsMVC.ViewModels
         {
             _carModel = new CarModel();
         }
+        public CarViewModel(CarModel car)
+        {
+            _carModel = car;
+        }
 
         public int CarID { get => _carModel.CarID; set => _carModel.CarID = value; }
 
@@ -44,8 +48,7 @@ namespace CarsMVC.ViewModels
             var carsVM = new List<CarViewModel>();
             foreach (var car in cars)
             {
-                CarViewModel carVM = new CarViewModel();
-                carVM.MapFromDto(car);
+                CarViewModel carVM = new CarViewModel(car);
                 carsVM.Add(carVM);
             }
             return carsVM;            
@@ -53,44 +56,17 @@ namespace CarsMVC.ViewModels
 
         public static CarViewModel GetCar(int id)
         {
-            var car = SQLData.GetCar(id);
-            var carVM = new CarViewModel();
-            carVM.MapFromDto(car);
-            return carVM;
+            return new CarViewModel(SQLData.GetCar(id));
         }
 
         public void Update()
         {
-            CarModel car = new CarModel();
-            this.MapToDto(car);
-            SQLData.UpdateCar(car);
+            SQLData.UpdateCar(_carModel);
         }
 
         public static void DeleteCar(int id)
         {
             SQLData.DeleteCar(id);
         }
-
-
-        private void MapFromDto(CarModel car)
-        {
-            this.CarID = car.CarID;
-            this.Year = car.Year;
-            this.Make = car.Make;
-            this.Model = car.Model;
-            this.Owner = car.Owner;
-        }
-
-        private void MapToDto(CarModel car)
-        {
-            car.CarID = this.CarID;
-            car.Year = this.Year;
-            car.Make = this.Make;
-            car.Model = this.Model;
-            car.Owner = this.Owner;
-        }
-
-
-
     }
 }

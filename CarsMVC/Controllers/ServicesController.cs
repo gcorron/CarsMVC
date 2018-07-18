@@ -1,4 +1,4 @@
-﻿using Corron.CarService;
+﻿using CarsMVC.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,9 @@ namespace CarsMVC.Controllers
         // GET: Services
         public ActionResult Index(int id, string carString)
         {
-            //List<ServiceModel> services = SQLData.GetServices(id);
+            IEnumerable<ServiceViewModel> services = ServiceViewModel.GetServices(id);
             ViewBag.carString = carString;
-            return View();
+            return View(services);
         }
 
         // GET: Services/Details/5
@@ -55,7 +55,7 @@ namespace CarsMVC.Controllers
 
         // POST: Services/Edit/5
         [HttpPost]
-        public ActionResult Edit(ServiceModel service)
+        public ActionResult Edit(ServiceViewModel service)
         {
             //if (SQLData.UpdateService(service))
                 return RedirectToAction("Index",service.CarID);

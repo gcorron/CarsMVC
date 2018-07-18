@@ -1,5 +1,5 @@
-﻿@using Corron.CarService
-@model ServiceModel
+﻿@using CarsMVC.ViewModels
+@model ServiceViewModel
 
 @{
     ViewBag.Title = "View";
@@ -48,13 +48,13 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ServiceLineList[0].ServiceLineTypeString)
+                @Html.DisplayNameFor(model => model.DummyLine.ServiceLineTypeString)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ServiceLineList[0].ServiceLineDesc)
+                @Html.DisplayNameFor(model => model.DummyLine.ServiceLineDesc)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ServiceLineList[0].ServiceLineChargeString)
+                @Html.DisplayNameFor(model => model.DummyLine.ServiceLineCharge)
             </th>
 
             <th></th>
@@ -70,7 +70,7 @@
                 @Html.DisplayFor(modelItem => item.ServiceLineDesc)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ServiceLineChargeString)
+                @Html.DisplayFor(modelItem => item.ServiceLineCharge)
             </td>
         </tr>
         }

@@ -49,6 +49,7 @@
                 @Html.DisplayFor(modelItem => item.Owner)
             </td>
             <td>
+                @Html.ActionLink("Services","Services",new { id=item.CarID}) |
                 @Html.ActionLink("Edit", "Edit", new { id = item.CarID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.CarID }, new { @class = "confirm" })
 
