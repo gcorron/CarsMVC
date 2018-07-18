@@ -10,53 +10,45 @@ namespace CarsMVC.ViewModels
     public class ServiceViewModel
     {
         private ServiceModel _serviceModel;
+        private ServiceLines _serviceLines;
+
         public ServiceViewModel()
         {
             _serviceModel = new ServiceModel();
+            _serviceLines = new ServiceLines(_serviceModel.ServiceLineList);
         }
 
         public ServiceViewModel(ServiceModel SM)
         {
             _serviceModel = SM;
+            _serviceLines = new ServiceLines(_serviceModel.ServiceLineList);
         }
-
-        public ServiceLineViewModel AddServiceLine()
-        {
-            var SL = new ServiceLineModel();
-            _serviceModel.ServiceLineList.Add(SL);
-            return new ServiceLineViewModel(SL);
-        }
-
-
-        public IEnumerable<ServiceLineViewModel> ServiceLineList
-        {
-            get
-            {
-                foreach (var SL in _serviceModel.ServiceLineList)
-                {
-                    yield return new ServiceLineViewModel(SL);
-                }
-            }
-        }
-
-        public ServiceLineModel DummyLine { get; set; }
-
-
 
         public int ServiceID { get => _serviceModel.ServiceID; set => _serviceModel.ServiceID = value; }
         public int CarID { get => _serviceModel.CarID; set => _serviceModel.CarID = value; }
 
+        [Display(Name = "Service Date")]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime ServiceDate { get => _serviceModel.ServiceDate; set => _serviceModel.ServiceDate = value; }
 
+        [Display(Name = "Tech Name")]
         [Required]
         public string TechName { get => _serviceModel.TechName; set => _serviceModel.TechName = value; }
 
+        [Display(Name = "Labor Cost")]
         public decimal LaborCost { get => _serviceModel.LaborCost; private set => _serviceModel.LaborCost = value; }
+
+        [Display(Name = "Parts Cost")]
         public decimal PartsCost { get => _serviceModel.PartsCost; private set => _serviceModel.PartsCost = value; }
+
+        [Display(Name = "Total")]
         public decimal TotalCost { get => _serviceModel.TotalCost;}
 
         public void RecalcCost() { _serviceModel.RecalcCost(); }
 
+
+        //detail lines wrapper
+        public ServiceLines ServiceLines { get => _serviceLines;}
 
         public static List<ServiceViewModel> GetServices(int CarID)
         {

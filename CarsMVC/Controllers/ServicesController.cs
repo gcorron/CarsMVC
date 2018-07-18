@@ -20,8 +20,7 @@ namespace CarsMVC.Controllers
         // GET: Services/Details/5
         public ActionResult Details(int id)
         {
-            //ServiceModel service = SQLData.GetService(id);
-            return View();
+            return View(ServiceViewModel.GetService(id));
         }
 
         // GET: Services/Create
@@ -49,8 +48,7 @@ namespace CarsMVC.Controllers
         // GET: Services/Edit/5
         public ActionResult Edit(int id)
         {
-            //ServiceModel service = SQLData.GetService(id);
-            return View();
+            return View(ServiceViewModel.GetService(id));
         }
 
         // POST: Services/Edit/5

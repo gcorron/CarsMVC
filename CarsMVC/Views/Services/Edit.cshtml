@@ -1,4 +1,4 @@
-﻿@model ServiceModel
+﻿@model CarsMVC.ViewModels.ServiceViewModel
 
 @{
     ViewBag.Title = "View";
@@ -33,7 +33,7 @@
         </div>
 
         <table>
-            @Html.EditorFor(model => model.ServiceLineList)
+            @Html.EditorFor(model => model.ServiceLines)
         </table>
 
     </div>
