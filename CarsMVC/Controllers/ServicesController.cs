@@ -10,77 +10,89 @@ namespace CarsMVC.Controllers
     public class ServicesController : Controller
     {
         // GET: Services
-        public ActionResult Index(int id, string carString)
+        public ActionResult Index(int id)
         {
-            IEnumerable<ServiceViewModel> services = ServiceViewModel.GetServices(id);
-            ViewBag.carString = carString;
-            return View(services);
+            var services = ServicesViewModel.GetServices(id);
+            return View("Index",services);
         }
 
         // GET: Services/Details/5
         public ActionResult Details(int id)
         {
-            return View(ServiceViewModel.GetService(id));
+            return View(ServicesViewModel.GetService(id));
         }
 
         // GET: Services/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            return View();
-        }
-
-        // POST: Services/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return View("Edit",ServicesViewModel.CreateService(id));
         }
 
         // GET: Services/Edit/5
         public ActionResult Edit(int id)
         {
-            return View(ServiceViewModel.GetService(id));
+            return View(ServicesViewModel.GetService(id));
         }
 
         // POST: Services/Edit/5
         [HttpPost]
         public ActionResult Edit(ServiceViewModel service)
         {
-            //if (SQLData.UpdateService(service))
-                return RedirectToAction("Index",service.CarID);
-            //else
-            //    return View();
-        }
+            RemoveBlankLine();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    service.Update();
+                    return RedirectToAction("Details", new { id = service.ServiceID });
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError("CustomError", e.Message);
+                    return View(service);
+                }
 
-        // GET: Services/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+            }
+            return View(service);
+         }
 
-        // POST: Services/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Recalc(ServiceViewModel service)
         {
+            RemoveBlankLine();
+            if (ModelState.IsValid)
+            {
+                service.Update(true);
+            }
+            return View("Edit",service);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(ServiceViewModel service)
+        {
+            // don't bother validating for delete!
+            int CarID = service.CarID;
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                ServicesViewModel.DeleteService(service.ServiceID);
+                return Index(CarID);
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                ModelState.AddModelError("CustomError",e.Message);
+                return View("Edit", service);
             }
+
         }
+
+
+        private void RemoveBlankLine()
+        {
+            ModelState.Remove("BlankLine.ServiceLineType");
+            ModelState.Remove("BlankLine.ServiceLineDesc");
+            ModelState.Remove("BlankLine.ServiceLineCharge");
+            ModelState.Remove("BlankLine.ServiceLineDelete");
+        }
+
     }
 }

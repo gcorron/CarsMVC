@@ -1,52 +1,138 @@
 ﻿@model CarsMVC.ViewModels.ServiceViewModel
+@section Scripts {
+    <script>
+        $(function () {
+            $('[data-confirm]').click(function (e) {
+                if (!confirm($(this).attr("data-confirm"))) {
+                    e.preventDefault();
+                }
+            });
+        });
 
-@{
-    ViewBag.Title = "View";
+        function AddNewLine() {
+            var row = document.getElementById("BL"); // find row to copy
+            var table = document.getElementById("details"); // find table to append to
+            var tbody = table.getElementsByTagName("tbody")[0];
+            var n = $('#details tr').length - 2; //compute next based index don't count blank row
+            var clone = row.cloneNode(true); // copy children too
+            var rowitems = clone.getElementsByTagName("td")
+            for (i = 0; i < rowitems.length; i++) {
+                var el = rowitems[i].firstChild;
+                el.setAttribute("id", el.id.replace("BlankLine_", "ServiceLines_" + n + "__"));
+                el.setAttribute("name", el.name.replace("BlankLine", "ServiceLines[" + n + "]"));
+            }
+            clone.removeAttribute("style");
+            clone.removeAttribute("id");
+            tbody.appendChild(clone); // add new row to end of tablebody
+
+        }
+    </script>
 }
 
-<h2>Edit Service: @ViewBag.CarString</h2>
+@{
+    /**/
 
-@using (Html.BeginForm())
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Service for  @Html.DisplayFor(m => m.ForCar)</h2>
+
+@using (Html.BeginForm("Edit", "Services", FormMethod.Post, htmlAttributes: new { id = "thisform" }))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ServiceID)
+    @Html.HiddenFor(m => m.CarID)
 
-<div class="form-horizontal">
-    <h4>Service Model</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.HiddenFor(model => model.ServiceID, new { id = "HiddenText" })
 
-        @Html.LabelFor(model => model.ServiceDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.ServiceDate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ServiceDate, "", new { @class = "text-danger" })
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.ValidationMessage("CustomError")
+
+    <div class="container">
+        <div class="form-group" style="float:left; width:200">
+            @Html.LabelFor(model => model.ServiceDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10" style="margin: 5px">
+                @Html.EditorFor(model => model.ServiceDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ServiceDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="float:left; width:200">
+            @Html.LabelFor(model => model.TechName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10" style="margin: 5px">
+                @Html.EditorFor(model => model.TechName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TechName, "", new { @class = "text-danger" })
+            </div>
         </div>
     </div>
 
-    <div class="form-group">
-
-        @Html.LabelFor(model => model.TechName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.TechName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.TechName, "", new { @class = "text-danger" })
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <table class="table">
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(model => model.LaborCost) : @Html.DisplayFor(model => model.LaborCost)
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(model => model.PartsCost) : @Html.DisplayFor(model => model.PartsCost)
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(model => model.TotalCost) : @Html.DisplayFor(model => model.TotalCost)
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-
-        <table>
-            @Html.EditorFor(model => model.ServiceLines)
-        </table>
-
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <table id="details" class="table">
+                    <tbody>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.ServiceLines[0].ServiceLineType)</th>
+                            <th>@Html.DisplayNameFor(model => model.ServiceLines[0].ServiceLineDesc)</th>
+                            <th>@Html.DisplayNameFor(model => model.ServiceLines[0].ServiceLineCharge)</th>
+                            <th>@Html.DisplayNameFor(model => model.ServiceLines[0].Delete)</th>
+                        </tr>
+                        <tr style="visibility:collapse" id="BL">
+                            @{Html.EnableClientValidation(false); }
+                            <td>@Html.EnumDropDownListFor(m => m.BlankLine.ServiceLineType, "Select My Type", new { @class = "form-control" })</td>
+                            <td>@Html.EditorFor(m => m.BlankLine.ServiceLineDesc)</td>
+                            <td>@Html.EditorFor(m => m.BlankLine.ServiceLineCharge, new { htmlAttributes = new { @class = "numeric-cost" } })</td>
+                            <td>@Html.EditorFor(m => m.BlankLine.Delete)</td>
+                            @*@{Html.EnableClientValidation(true); }*@
 
+                        </tr>
+
+                        @for (int i = 0; i < Model.ServiceLines.Count; i++)
+                        {
+                            <tr>
+                                <td>@Html.EnumDropDownListFor(m => m.ServiceLines[i].ServiceLineType, "Select My Type", new { @class = "form-control" })</td>
+                                <td>@Html.EditorFor(m => m.ServiceLines[i].ServiceLineDesc)</td>
+                                <td>@Html.EditorFor(m => m.ServiceLines[i].ServiceLineCharge, new { htmlAttributes = new { @class = "numeric-cost" } })</td>
+                                <td>@Html.EditorFor(m => m.ServiceLines[i].Delete)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <button type="button" onclick="AddNewLine()">Add Line</button>
+            </div>
+        </div>
+    </div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
+            <input type="submit" value="Save" class="btn btn-default" formaction=@Url.Action("Edit","Services",new { id = Model.ServiceID }) />
+            <input type="submit" value="Recalculate" class="btn btn-default" formaction=@Url.Action("Recalc","Services",new { id = Model.ServiceID }) />
+            @if (Model.ServiceID != 0)
+            {
+                <input type="submit" value="Delete" data-confirm="Are you sure?" class="btn btn-default" formaction=@Url.Action("Delete","Services",new { id = Model.ServiceID }) />
+            }
         </div>
     </div>
-</div>
-        }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    <div>
+        @Html.ActionLink("Back to List", "Index", new { id = Model.CarID })
+    </div>
+}

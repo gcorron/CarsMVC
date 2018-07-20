@@ -5,7 +5,7 @@
     ViewBag.Title = "View";
 }
 
-<h2>Details for Service: @ViewBag.CarString</h2>
+<h2>Details for Service: @Html.DisplayFor(m => m.ForCar)</h2>
 
 <div>
     <h4>ServiceModel</h4>
@@ -40,7 +40,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TotalCost)
+            @Html.DisplayFor(model => model.PartsCost)
         </dd>
     </dl>
 
@@ -72,7 +72,7 @@
                                 @Html.DisplayFor(m => m.ServiceLines[i].ServiceLineDesc)
                             </td>
                             <td align="right">
-                                @Html.DisplayFor(m => m.ServiceLines[i].ServiceLineCharge)
+                                @Html.DisplayFor(m => m.ServiceLines[i].ServiceLineCharge, new { @class = "pmtallocated pull-right", @dir = "rtl" })
                             </td>
                         </tr>
                     }
