@@ -11,12 +11,35 @@ namespace CarsMVC.Controllers
     public class CarsController : Controller
     {
 
-
         // GET: Car
-        public ActionResult Index()
+        //public ActionResult Index()
+        //{
+        //    var cars = CarsViewModel.GetCars();
+        //    return View(cars);
+        //}
+
+        public ActionResult Filter()
         {
-            var cars = CarViewModel.GetCars();
-            return View(cars);
+            return View(new CarsViewModel());
+        }
+
+        [HttpPost]
+        public ActionResult Filter(CarsViewModel filter)
+        {
+            if (ModelState.IsValid)
+            {
+                var cars = filter.GetCarsFiltered();
+                return View("Index", cars);
+            }
+            return View("Filter",filter);
+
+        }
+
+        [HttpPost]
+        public ActionResult SearchOwner(string term)
+        {
+            var res = CarsViewModel.SearchOwners(term);
+            return Content(res.ToString(), "application/json");
         }
 
         public ActionResult Create()
@@ -67,6 +90,5 @@ namespace CarsMVC.Controllers
         {
             return RedirectToAction("Index","Services", new { id, carString });
         }
-
     }
 }

@@ -41,18 +41,6 @@ namespace CarsMVC.ViewModels
             }
         }
 
-        public static List<CarViewModel> GetCars()
-        {
-            var cars = SQLData.GetCars();
-            cars.Sort();
-            var carsVM = new List<CarViewModel>();
-            foreach (var car in cars)
-            {
-                CarViewModel carVM = new CarViewModel(car);
-                carsVM.Add(carVM);
-            }
-            return carsVM;            
-        }
 
         public static CarViewModel GetCar(int id)
         {

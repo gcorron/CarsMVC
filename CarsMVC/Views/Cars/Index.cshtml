@@ -10,10 +10,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Car Search Results</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <a href="javascript:history.back()">Go Back</a>
 </p>
 <table class="table">
     <tr>
@@ -49,7 +49,7 @@
                 @Html.DisplayFor(modelItem => item.Owner)
             </td>
             <td>
-                @Html.ActionLink("Services","Services", new { id = item.CarID } ) |
+                @Html.ActionLink("Services", "Services", new { id = item.CarID }) |
                 @Html.ActionLink("Edit", "Edit", new { id = item.CarID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.CarID }, new { @class = "confirm" })
 
@@ -58,3 +58,4 @@
     }
 
 </table>
+
