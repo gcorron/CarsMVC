@@ -21,6 +21,7 @@ namespace CarsMVC.ViewModels
             _SL = sl;
         }
 
+        [Display(Name = "Line Type")]
         public ServiceLineModel.LineTypes ServiceLineType { get => _SL.ServiceLineType; set => _SL.ServiceLineType = value; }
 
         [Display(Name = "Description")]

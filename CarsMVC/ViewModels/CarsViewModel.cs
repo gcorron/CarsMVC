@@ -13,19 +13,16 @@ namespace CarsMVC.ViewModels
     {
 
         [Required]
-        [Display(Name = "Search Year")]
+        [Display(Name = "Lookup Year")]
         public string Year { get; set; }
-        [Display(Name = "Search Owner")]
+        [Display(Name = "Lookup Owner")]
         public string Owner { get; set; }
         [Display(Name = "Select a Year")]
         public IEnumerable<SelectListItem> SelectYears { get; private set; }
 
 
-        public CarsViewModel()
+        public void PrepYears()
         {
-
-            SelectListItem[] anyYear = { new SelectListItem { Value = "0", Text = "Any Year" } };
-
             var yearList = SQLData.GetCars()
                            .Select(c => c.Year)
                            .Distinct()
@@ -40,9 +37,23 @@ namespace CarsMVC.ViewModels
             return SQLData.SearchOwners(search);
         }
 
+        public static CarViewModel CreateCar()
+        {
+            return new CarViewModel { Year = DateTime.Now.Year - 8 };
+        }
+
         public List<CarViewModel> GetCarsFiltered()
         {
-            var cars = SQLData.GetCarsFiltered(Int32.Parse(Year), Owner + "%");
+            return GetCars2(SQLData.GetCarsFiltered(Int32.Parse(Year), Owner));
+        }
+
+        public static List<CarViewModel> GetCarsForOwner(string owner)
+        {
+            return GetCars2(SQLData.GetCarsFiltered(0, owner));
+        }
+
+        private static List<CarViewModel> GetCars2(List<CarModel> cars)
+        {
             cars.Sort();
             var carsVM = new List<CarViewModel>();
             foreach (var car in cars)
@@ -52,6 +63,7 @@ namespace CarsMVC.ViewModels
             }
             return carsVM;
         }
+
     }
 
 }

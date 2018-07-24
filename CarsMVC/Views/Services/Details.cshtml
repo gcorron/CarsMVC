@@ -8,7 +8,6 @@
 <h2>Details for Service: @Html.DisplayFor(m => m.ForCar)</h2>
 
 <div>
-    <h4>ServiceModel</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -86,5 +85,5 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ServiceID }) |
-    @Html.ActionLink("Back to List", "Index", new { id = Model.CarID })
+    @Html.ActionLink("Back","Index",new { id =Model.CarID})
 </p>

@@ -14,6 +14,7 @@ namespace CarsMVC.ViewModels
         {
             _carModel = new CarModel();
         }
+
         public CarViewModel(CarModel car)
         {
             _carModel = car;

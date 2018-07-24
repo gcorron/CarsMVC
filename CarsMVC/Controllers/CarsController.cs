@@ -5,22 +5,36 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CarsMVC.ViewModels;
+using Newtonsoft.Json;
 
 namespace CarsMVC.Controllers
 {
     public class CarsController : Controller
     {
 
-        // GET: Car
-        //public ActionResult Index()
-        //{
-        //    var cars = CarsViewModel.GetCars();
-        //    return View(cars);
-        //}
+        public ActionResult Index()
+        {
+            var cookie = Request.Cookies.Get("filter");
+            if (cookie is null || cookie.Value is null)
+                return RedirectToRoute("Filter");
+            else
+            {
+                string json = cookie.Value;
+                CarsViewModel filter = JsonConvert.DeserializeObject<CarsViewModel>(json);
+                var cars = filter.GetCarsFiltered();
+                return View("Index", cars);
+            }
+        }
 
         public ActionResult Filter()
         {
-            return View(new CarsViewModel());
+            CarsViewModel filter = new CarsViewModel();
+            var cookie = Request.Cookies.Get("filter");
+            string json = cookie.Value;
+            if (json != "")
+                filter=JsonConvert.DeserializeObject<CarsViewModel>(json);
+            filter.PrepYears();
+            return View(filter);
         }
 
         [HttpPost]
@@ -29,6 +43,12 @@ namespace CarsMVC.Controllers
             if (ModelState.IsValid)
             {
                 var cars = filter.GetCarsFiltered();
+
+                //remember the filter settings for later
+                string json = JsonConvert.SerializeObject(filter);
+                var cookie = new HttpCookie("filter",json);
+                HttpContext.Response.SetCookie(cookie);
+
                 return View("Index", cars);
             }
             return View("Filter",filter);
@@ -44,7 +64,7 @@ namespace CarsMVC.Controllers
 
         public ActionResult Create()
         {
-            CarViewModel car = new CarViewModel();
+            CarViewModel car = CarsViewModel.CreateCar();
             return View("Edit", car);
 
         }
@@ -52,13 +72,7 @@ namespace CarsMVC.Controllers
         [HttpPost]
         public ActionResult Create(CarViewModel car)
         {
-            if (ModelState.IsValid)
-            {
-                car.Update();
-                return RedirectToAction("Index");
-            }
-
-            return View(car);
+            return PostEditCar(car);
         }
 
 
@@ -71,14 +85,21 @@ namespace CarsMVC.Controllers
         [HttpPost]
         public ActionResult Edit(CarViewModel car)
         {
+            return PostEditCar(car);
+        }
+
+        public ActionResult PostEditCar(CarViewModel car)
+        {
             if (ModelState.IsValid)
             {
                 car.Update();
-                return RedirectToAction("Index");
+                var cars = CarsViewModel.GetCarsForOwner(car.Owner);
+                return View("Index", cars);
             }
-            return View(car);
-        }
 
+            return View(car);
+
+        }
         public ActionResult Delete(int id)
         {
 
