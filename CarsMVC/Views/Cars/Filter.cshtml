@@ -2,27 +2,24 @@
 @section Scripts
 {
     <script>
-$(document).ready(function () {
-        $('#owner').autocomplete({
-            source: function(request,response) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("SearchOwner", "Cars")',
-                    dataType: 'json',
-                    data: { name: request.term } ,
-                    success: function (data) {
-                    response(data.items);
+        $(function () {
+            $('input[data-autocomplete]').each(function () {
+                var url = $(this).data('autocomplete');
+                $(this).autocomplete({
+                    source: function (request, response) {
+                        $.getJSON(url, {
+                            term: request.term
+                        }, response);
                     }
-                })
-            },
-            messages: {
-                noResults: "", results: ""
-            }
-        })
-})
-
+                });
+            });
+        });
     </script>
 }
+@section AddToHead{
+    <link href="~/Content/themes/base/autocomplete.css" rel="stylesheet" />
+}
+
 @{
     ViewBag.Title = "Car Search";
 }
@@ -46,9 +43,9 @@ $(document).ready(function () {
                             @Html.DropDownListFor(model => model.Year, new SelectList(Model.SelectYears, "Value", "Text"), "Select Year", new { htmlAttributes = new { @class = "form-control" } })
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group ui-widget">
                             @Html.LabelFor(model => model.Owner, htmlAttributes: new { @class = "control-label" })
-                            @Html.EditorFor(model => model.Owner, new { htmlAttributes = new { @class = "form-control", placeholder = "Any Owner", id = "owner" } })
+                            @Html.EditorFor(model => model.Owner, new { htmlAttributes = new { @class = "form-control", placeholder = "Any Owner", data_autocomplete = $"{@Url.Action("SearchOwner", "Cars")}" } })
                             @Html.ValidationMessageFor(model => model.Owner, "", new { @class = "text-danger" })
                         </div>
                     </div>

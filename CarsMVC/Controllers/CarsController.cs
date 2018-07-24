@@ -35,11 +35,11 @@ namespace CarsMVC.Controllers
 
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult SearchOwner(string term)
         {
             var res = CarsViewModel.SearchOwners(term);
-            return Content(res.ToString(), "application/json");
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Create()
