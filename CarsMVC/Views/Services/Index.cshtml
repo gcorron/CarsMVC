@@ -5,52 +5,55 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Services for @Html.DisplayFor(m => m.ForCar)</h2>
+<h2>Services <small>for @Html.DisplayFor(m => m.ForCar)</small></h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create", new { id = Model.ForCarId })
-</p>
-@if (Model.Services is null)
-{
-    <h2>No services yet for this auto.</h2>
-}
-else
-{
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Services[0].ServiceDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Services[0].TechName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Services[0].TotalCost)
-            </th>
+<div class="container">
+    <div class="well col-md-8">
 
-            <th></th>
-        </tr>
-
-        @foreach (ServiceViewModel item in Model.Services)
+        @if (Model.Services is null)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ServiceDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TechName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TotalCost)
-                </td>
-
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ServiceID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.ServiceID })
-                </td>
-            </tr>
+            <p>No services yet for this auto.</p>
         }
-    </table>
-}
-@Html.ActionLink("Back", "Index","Cars")
+        else
+        {
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Services[0].ServiceDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Services[0].TechName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Services[0].TotalCost)
+                    </th>
 
+                    <th></th>
+                </tr>
+
+                @foreach (ServiceViewModel item in Model.Services)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ServiceDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TechName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalCost)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.ServiceID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.ServiceID })
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+</div>
+
+<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index","Cars")'">Back</button>
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create", new { id = Model.ForCarId })'">Create New</button>

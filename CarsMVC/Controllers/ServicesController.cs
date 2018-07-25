@@ -44,7 +44,7 @@ namespace CarsMVC.Controllers
                 try
                 {
                     service.Update();
-                    return RedirectToAction("Details", new { id = service.ServiceID });
+                    return RedirectToAction("Index", new { id = service.CarID });
                 }
                 catch (Exception e)
                 {

@@ -29,8 +29,13 @@ namespace CarsMVC.ViewModels
                            .Select(y => new SelectListItem { Value = y.ToString(), Text = y.ToString() }).ToList<SelectListItem>();
             yearList.Add(new SelectListItem { Value = "0", Text = "Any Year" });
             SelectYears = (IEnumerable<SelectListItem>)yearList.OrderBy(i => i.Value);
-            if (Year.Equals(""))
+            if (String.IsNullOrWhiteSpace(Year))
                 Year = "0";
+            else
+            {
+                if (!(yearList.Select(yl => yl.Value).Contains(Year))) //Year must be in the list
+                    Year = "0";
+            }
         }
 
         public static string[]  SearchOwners(string search)
@@ -64,6 +69,22 @@ namespace CarsMVC.ViewModels
             }
             return carsVM;
         }
+
+        public string SearchDesc
+        {
+            get {
+                string owner="anyone";
+                string year="any year";
+                if (!(String.IsNullOrWhiteSpace(Owner)))
+                    owner = Owner;
+                if (!(String.IsNullOrWhiteSpace(Year)) && Year.CompareTo("0")>0)
+                    year = $"{Year} model year";
+
+                return $"owner '{owner}' for {year}";
+            }
+
+        }
+
         public string Error
         {
             get

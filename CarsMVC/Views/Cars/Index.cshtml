@@ -14,56 +14,56 @@
 
 @if (Model.Any() == false)
 {
-    <h4>No results found.</h4>
+    <h4>No results found for @ViewBag.Search.</h4>
 }
 else
 {
+    <div class="container">
+        <div class="well col-md-8">
+            <table class="table table-condensed table-striped">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Year)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Make)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Model)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner)
+                    </th>
+                    <th></th>
+                </tr>
 
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Make)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>
-            <th></th>
-        </tr>
+                @foreach (var item in Model)
+                {
+                    var myModal = "myModal" + item.CarID;
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Make)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Model)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Owner)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Services", "Services", new { id = item.CarID }) |
+                            @Html.ActionLink("Edit", "Edit", new { id = item.CarID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.CarID }, new { @class = "confirm" })
 
-        @foreach (var item in Model)
-        {
-            var myModal = "myModal" + item.CarID;
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Make)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Model)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Owner)
-                </td>
-                <td>
-                    @Html.ActionLink("Services", "Services", new { id = item.CarID }) |
-                    @Html.ActionLink("Edit", "Edit", new { id = item.CarID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.CarID }, new { @class = "confirm" })
+                        </td>
+                    </tr>
+                }
 
-                </td>
-            </tr>
-        }
-
-    </table>
+            </table>
+        </div>
+    </div>
 }
-<div>
-    @Html.ActionLink("Back", "Filter")
-</div>
-
+<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Filter","Cars")'">Back</button>

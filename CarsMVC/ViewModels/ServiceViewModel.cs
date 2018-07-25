@@ -36,7 +36,8 @@ namespace CarsMVC.ViewModels
         [ScaffoldColumn(false)]
         public int CarID { get => _serviceModel.CarID; set => _serviceModel.CarID = value; }
 
-        public string ForCar { get; }
+        [Display(Name = "For")]
+        public string ForCar { get; set; }
 
         [Display(Name = "Service Date")]
         [DisplayFormat(DataFormatString = "{0:d}",ApplyFormatInEditMode = true)]
@@ -47,12 +48,15 @@ namespace CarsMVC.ViewModels
         public string TechName { get => _serviceModel.TechName; set => _serviceModel.TechName = value; }
 
         [Display(Name = "Labor Cost")]
+        [DataType(DataType.Currency)]
         public decimal LaborCost { get => _serviceModel.LaborCost; private set => _serviceModel.LaborCost = value; }
 
         [Display(Name = "Parts Cost")]
+        [DataType(DataType.Currency)]
         public decimal PartsCost { get => _serviceModel.PartsCost; private set => _serviceModel.PartsCost = value; }
 
         [Display(Name = "Total")]
+        [DataType(DataType.Currency)]
         public decimal TotalCost { get => _serviceModel.TotalCost;}
 
         public void RecalcCost() { _serviceModel.RecalcCost(); }

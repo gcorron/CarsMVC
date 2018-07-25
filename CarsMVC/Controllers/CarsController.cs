@@ -30,9 +30,12 @@ namespace CarsMVC.Controllers
         {
             CarsViewModel filter = new CarsViewModel();
             var cookie = Request.Cookies.Get("filter");
-            string json = cookie.Value;
-            if (json != "")
-                filter=JsonConvert.DeserializeObject<CarsViewModel>(json);
+            if (!(cookie is null))
+            {
+                string json = cookie.Value;
+                if (json != "")
+                    filter = JsonConvert.DeserializeObject<CarsViewModel>(json);
+            }
             filter.PrepYears();
             return View(filter);
         }
@@ -48,7 +51,7 @@ namespace CarsMVC.Controllers
                 string json = JsonConvert.SerializeObject(filter);
                 var cookie = new HttpCookie("filter",json);
                 HttpContext.Response.SetCookie(cookie);
-
+                ViewBag.Search = filter.SearchDesc;
                 return View("Index", cars);
             }
             filter.PrepYears();
