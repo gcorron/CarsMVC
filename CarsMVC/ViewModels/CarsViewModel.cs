@@ -9,7 +9,7 @@ using Corron.CarService;
 
 namespace CarsMVC.ViewModels
 {
-    public class CarsViewModel
+    public class CarsViewModel : IDataErrorInfo
     {
 
         [Required]
@@ -20,7 +20,6 @@ namespace CarsMVC.ViewModels
         [Display(Name = "Select a Year")]
         public IEnumerable<SelectListItem> SelectYears { get; private set; }
 
-
         public void PrepYears()
         {
             var yearList = SQLData.GetCars()
@@ -30,6 +29,8 @@ namespace CarsMVC.ViewModels
                            .Select(y => new SelectListItem { Value = y.ToString(), Text = y.ToString() }).ToList<SelectListItem>();
             yearList.Add(new SelectListItem { Value = "0", Text = "Any Year" });
             SelectYears = (IEnumerable<SelectListItem>)yearList.OrderBy(i => i.Value);
+            if (Year.Equals(""))
+                Year = "0";
         }
 
         public static string[]  SearchOwners(string search)
@@ -62,6 +63,20 @@ namespace CarsMVC.ViewModels
                 carsVM.Add(carVM);
             }
             return carsVM;
+        }
+        public string Error
+        {
+            get
+            {
+                if (Year.CompareTo("0") <= 0 && String.IsNullOrWhiteSpace(Owner))
+                    return "Specify the Year and/or Owner";
+                else
+                    return null;
+            }
+        }
+
+        public string this[string columnName] {
+            get { return null; }
         }
 
     }

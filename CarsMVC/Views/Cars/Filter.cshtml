@@ -6,6 +6,12 @@
             $('input[data-autocomplete]').each(function () {
                 var url = $(this).data('autocomplete');
                 $(this).autocomplete({
+                    change: function (event, ui) {
+                        if (!ui.item) {
+                            $(this).val('');
+                        }
+                    }
+                    ,
                     source: function (request, response) {
                         $.getJSON(url, {
                             term: request.term
@@ -14,6 +20,8 @@
                 });
             });
         });
+
+
     </script>
 }
 @section AddToHead{
@@ -31,38 +39,31 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h1>Find a Car</h1>
+        <h1>Select a Car</h1>
 
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
         <div class="row">
             <div class="well col-sm-4">
-                    <div class="form-group">
-                        <div class="col-xs-1"></div>
-                        <div class="col-xs-4">
-                            @Html.DropDownListFor(model => model.Year, new SelectList(Model.SelectYears, "Value", "Text"), "Select Year", new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-1"></div>
-                        <div class="col-xs-10 ui-widget ui-widget-content">
-                            @Html.LabelFor(model => model.Owner, htmlAttributes: new { @class = "control-label" })
-                            @Html.EditorFor(model => model.Owner, new { htmlAttributes = new { @class = "form-control", placeholder = "Any Owner", data_autocomplete = $"{@Url.Action("SearchOwner", "Cars")}" } })
-                            <br />
-                        </div>
-                    </div>
-                
-                <div class="row">
-                    <div class="col-sm-8"></div>
-                    <div class="form-group col-sm-4">
-                        <input type="submit" value="Go" class="btn btn-default" />
+                <div class="form-group">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-4">
+                        @Html.DropDownListFor(model => model.Year, new SelectList(Model.SelectYears, "Value", "Text"), null, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
-    
+                <div class="form-group">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10 ui-widget ui-widget-content">
+                        @Html.LabelFor(model => model.Owner, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Owner, new { htmlAttributes = new { @class = "form-control", placeholder = "Any Owner", data_autocomplete = $"{@Url.Action("SearchOwner", "Cars")}" } })
+                        <br />
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-sm-8"></div>
                     <div class="form-group col-sm-4">
-                        @Html.ActionLink("Add Car", "Create")
+                        <button type="submit" class="btn btn-primary">Select</button>
                     </div>
                 </div>
             </div>
@@ -70,5 +71,6 @@
         </div>
     </div>
 
-
 }
+<button type="button" class="btn btn-success" onclick="location.href= '@Url.Action("Create")'">Add Car</button>
+

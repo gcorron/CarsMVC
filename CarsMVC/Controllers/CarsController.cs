@@ -51,6 +51,7 @@ namespace CarsMVC.Controllers
 
                 return View("Index", cars);
             }
+            filter.PrepYears();
             return View("Filter",filter);
 
         }
