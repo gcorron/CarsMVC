@@ -60,7 +60,7 @@
         </div>
     </div>
     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">Back</button>
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn btn-primary">@(Model.CarID == 0 ? "Create" : "Update")</button>
 }
 
 

@@ -1,7 +1,9 @@
 This is a simple app I developed, along with another app, CarsInCSharp, to refresh the following skillset:
 
-* C#
+* C# (inheritance, interfaces, delegates, anonymous types, LINQ ...)
+* SOLID principles, MVVM
 * VB.NET (Another project I wrote translated from C#)
+* .NET Framework, WPF
 * ASP.NET, MVC, WebAPI
 * Git
 * SQL Server tables and stored procedures
