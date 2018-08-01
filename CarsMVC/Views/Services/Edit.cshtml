@@ -26,6 +26,39 @@
             tbody.appendChild(clone); // add new row to end of tablebody
 
         }
+
+        function Recalc() {
+
+            var sums = [0, 0, 0];
+            var i;
+            var charge;
+
+            $('input.numeric-cost').each(function () {
+                charge = Number($(this).val());
+                sums[2] += charge;
+                var el = $(this).parentsUntil('tbody', 'tr').first().find(':selected');
+                i = el;
+                if (el != null) {
+
+                    i = Number(el.val());
+                    switch (i) {
+                        case 0:
+                            sums[0] += charge;
+                            break;
+                        case 1:
+                            sums[1] += charge;
+                            break;
+                        default:
+                            sums[1] = i;
+                    }
+                }
+            });
+            i = 0;
+            $('tfoot tr').each(function () {
+                $(this).children().last().text('$' + sums[i++].toFixed(2));
+            })
+        }
+
     </script>
 }
 
@@ -128,7 +161,6 @@
                                 <td></td>
                                 <td class="success">Total</td>
                                 <td class="success" align="right">@Html.DisplayFor(model => model.TotalCost, new { @class = "pmtallocated pull-right", @dir = "rtl" })</td>
-                                <td></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -140,7 +172,8 @@
     </div>
     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", new { id = Model.CarID })'">Back</button>
     <button type="submit" class="btn btn-success" formaction=@Url.Action("Edit","Services",new { id = Model.ServiceID })>Save</button>
-    <button type="submit" class="btn btn-info" formaction=@Url.Action("Recalc","Services",new { id = Model.ServiceID })>Recalculate</button>
+// server recalc    <button type="submit" class="btn btn-info" formaction=@Url.Action("Recalc","Services",new { id = Model.ServiceID })>Recalculate</button>
+    <button type="button" class="btn btn-info" onclick="Recalc()">Recalculate</button>
     <button type="button" class="btn btn-warning" onclick="AddNewLine()">Add Line</button>
     if (Model.ServiceID != 0)
     {
