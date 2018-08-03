@@ -16,7 +16,7 @@ namespace CarsMVC.Controllers
         {
             var cookie = Request.Cookies.Get("filter");
             if (cookie is null || cookie.Value is null)
-                return RedirectToRoute("Filter");
+                return RedirectToAction("Filter");
             else
             {
                 string json = cookie.Value;

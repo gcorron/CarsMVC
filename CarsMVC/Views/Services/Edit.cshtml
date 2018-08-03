@@ -7,6 +7,9 @@
                     e.preventDefault();
                 }
             });
+            $('input.numeric-cost').blur(function () {
+                this.value = FormatDollars(this.value)
+            });
         });
 
         function AddNewLine() {
@@ -27,14 +30,26 @@
 
         }
 
+        function FormatDollars(nStr) {
+            if (!isNaN(parseFloat(nStr)) && isFinite(nStr)) {
+                return Number(nStr).toFixed(2);
+            }
+            else {
+                return '?? ' +  nStr;
+            }
+        }
+
         function Recalc() {
 
             var sums = [0, 0, 0];
             var i;
             var charge;
+            var hasProblem = false;
 
             $('input.numeric-cost').each(function () {
                 charge = Number($(this).val());
+                if (Number.isNaN(charge))
+                    hasProblem = true;
                 sums[2] += charge;
                 var el = $(this).parentsUntil('tbody', 'tr').first().find(':selected');
                 i = el;
@@ -53,7 +68,10 @@
                     }
                 }
             });
+            if (hasProblem)
+                sums = [ 0, 0, 0];
             i = 0;
+
             $('tfoot tr').each(function () {
                 $(this).children().last().text('$' + sums[i++].toFixed(2));
             })
